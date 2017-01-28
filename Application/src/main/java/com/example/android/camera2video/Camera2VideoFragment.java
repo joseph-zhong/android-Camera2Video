@@ -106,7 +106,7 @@ public class Camera2VideoFragment extends Fragment
     private Button mButtonVideo;
 
     /**
-     * A refernce to the opened {@link android.hardware.camera2.CameraDevice}.
+     * A reference to the opened {@link android.hardware.camera2.CameraDevice}.
      */
     private CameraDevice mCameraDevice;
 
@@ -447,6 +447,9 @@ public class Camera2VideoFragment extends Fragment
             }
             configureTransform(width, height);
             mMediaRecorder = new MediaRecorder();
+            if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                return;
+            }
             manager.openCamera(cameraId, mStateCallback, null);
         } catch (CameraAccessException e) {
             Toast.makeText(activity, "Cannot access the camera.", Toast.LENGTH_SHORT).show();
@@ -484,6 +487,7 @@ public class Camera2VideoFragment extends Fragment
      * Start the camera preview.
      */
     private void startPreview() {
+        Log.i("TESTING", "Start Preview Called");
         if (null == mCameraDevice || !mTextureView.isAvailable() || null == mPreviewSize) {
             return;
         }
@@ -590,9 +594,11 @@ public class Camera2VideoFragment extends Fragment
         int rotation = activity.getWindowManager().getDefaultDisplay().getRotation();
         switch (mSensorOrientation) {
             case SENSOR_ORIENTATION_DEFAULT_DEGREES:
+                Log.i("TESTING", "HELLOOOOOOOOOOO");
                 mMediaRecorder.setOrientationHint(DEFAULT_ORIENTATIONS.get(rotation));
                 break;
             case SENSOR_ORIENTATION_INVERSE_DEGREES:
+                Log.i("TESTING", "good BYEEEEEE");
                 mMediaRecorder.setOrientationHint(INVERSE_ORIENTATIONS.get(rotation));
                 break;
         }
